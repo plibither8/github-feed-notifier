@@ -1,0 +1,28 @@
+{
+  "name": "github-notif",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel ./index.js --out-dir lib/",
+    "build:watch": "npm run build -- --watch",
+    "lint": "eslint ./index.js",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plibither8/github-notif.git"
+  },
+  "author": "Mihir Chaturvedi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plibither8/github-notif/issues"
+  },
+  "homepage": "https://github.com/plibither8/github-notif#readme"
+}
