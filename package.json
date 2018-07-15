@@ -9,7 +9,12 @@
     "lint": "eslint ./index.js",
     "lint:fix": "npm run lint -- --fix"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-notifier": "^5.2.1",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "rss-parser": "^3.4.2"
+  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
