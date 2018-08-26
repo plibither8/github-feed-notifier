@@ -1,7 +1,8 @@
 const { writeFile }  = require('fs');
 const request        = require('request-promise');
-const Parser         = require('rss-parser');
+const rssParser      = require('rss-parser');
 const notifier       = require('node-notifier');
+const htmlParser     = require('node-html-parser');
 
 const data           = require('./.data.json');
 const {atob, btoa}   = require('./helpers.js');
@@ -9,28 +10,40 @@ const {atob, btoa}   = require('./helpers.js');
 const feedURL = data.url;
 
 let jsonFeed,
-    lastId = data.lastId;
+    lastId = data.lastBuildDate;
 
 const getFeed = async (url) => {
     let xmlString;
-    console.log('checl');
     await request(url, (err, status, body) => {
         xmlString = body;
         if (err) {
             console.log('shiz');
         }
     });
-    // console.log(btoa(xmlString).substr(0,5));
     return new Promise((resolve, reject) => {
         resolve(xmlString);
     })
 };
 
 const parseFeed = async (str) => {
-    const parser = new Parser;
-    const jsonFeed = await parser.parseString(str);
-    // console.log(jsonFeed);
-    return jsonFeed;
+    const parseFeed = new rssParser;
+    const jsonFeed = await parseFeed.parseString(str);
+    const refinedJsonFeed = {
+        lastUpdated: jsonFeed.lastBuildDate,
+        feedUrl: jsonFeed.feedUrl,
+        items: []
+    };
+
+    jsonFeed.items.map(item => {
+        refinedJsonFeed.items.push({
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            img: htmlParser.parse(item.content).querySelector('img').attributes.src
+        });
+    });
+
+    return refinedJsonFeed;
 };
 
 const setLastId = async () => {
@@ -81,8 +94,6 @@ const compare = async (feed) => {
     return unreadItems;
 };
 
-// compare(parseFeed(getFeed(feedURL)));
-
 notifier.notify(
     {
         title: 'GitHub Feed',
@@ -90,11 +101,12 @@ notifier.notify(
         sound: true,
         wait: true
     },
-    function (err, response) {}
+    (err, res) => {
+        console.log('hello');
+    }
 );
 
 (async () => {
-    (async () => {
-        console.log(await parseFeed(await getFeed(feedURL)))
-    })()
+    const feed = await parseFeed(await getFeed(feedURL));
+    console.log(feed)
 })()

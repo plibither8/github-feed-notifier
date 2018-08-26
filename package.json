@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel ./index.js --out-dir lib/",
-    "build:watch": "npm run build -- --watch",
     "lint": "eslint ./index.js",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "dev": "nodemon index"
   },
   "dependencies": {
+    "node-html-parser": "^1.1.9",
     "node-notifier": "^5.2.1",
-    "request": "^2.87.0",
+    "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "rss-parser": "^3.4.2"
+    "rss-parser": "^3.4.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
