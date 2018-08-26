@@ -1,23 +1,26 @@
-const { writeFile }  = require('fs');
 const request        = require('request-promise');
 const rssParser      = require('rss-parser');
 const notifier       = require('node-notifier');
 const htmlParser     = require('node-html-parser');
+const path           = require('path');
+const open           = require('open');
+const fs             = require('fs');
+const { promisify }  = require('util');
+const writeFile      = promisify(fs.writeFile);
 
-const data           = require('./.data.json');
 const {atob, btoa}   = require('./helpers.js');
+let data             = require('./.data.json');
 
-const feedURL = data.url;
+const feedUrl = data.url;
 
-let jsonFeed,
-    lastId = data.lastBuildDate;
+let jsonFeed;
 
 const getFeed = async (url) => {
     let xmlString;
     await request(url, (err, status, body) => {
         xmlString = body;
         if (err) {
-            console.log('shiz');
+            throw err;
         }
     });
     return new Promise((resolve, reject) => {
@@ -26,87 +29,114 @@ const getFeed = async (url) => {
 };
 
 const parseFeed = async (str) => {
-    const parseFeed = new rssParser;
-    const jsonFeed = await parseFeed.parseString(str);
+    const parsedJsonFeed = await (new rssParser).parseString(str);
     const refinedJsonFeed = {
-        lastUpdated: jsonFeed.lastBuildDate,
-        feedUrl: jsonFeed.feedUrl,
+        lastUpdated: (new Date(parsedJsonFeed.lastBuildDate)).getTime(),
+        feedUrl: parsedJsonFeed.feedUrl,
         items: []
     };
 
-    jsonFeed.items.map(item => {
+    parsedJsonFeed.items.map(item => {
         refinedJsonFeed.items.push({
             id: item.id,
+            time: (new Date(item.pubDate)).getTime(),
             title: item.title,
             author: item.author,
-            img: htmlParser.parse(item.content).querySelector('img').attributes.src
+            img: htmlParser.parse(item.content).querySelector('img').attributes.src,
+            link: item.link
         });
     });
 
+    console.log(refinedJsonFeed);
     return refinedJsonFeed;
 };
 
-const setLastId = async () => {
-    const dataObj = {};
-    dataObj.url = data.url;
-    if (lastId === null) {
-        lastId = parseFeed(getFeed(feedURL)).items.reverse()[0].id;
-    } else {
-        dataObj.lastId = lastId;
-    }
-    return new Promise((resolve, reject) => {
-        writeFile('.data.json', JSON.stringify(dataObj), (err) => {
-            if (err) {
-                console.log('gg');
-                reject(err);
-            } else {
-                console.log('donezo');
-                resolve();
-            }
-        });
-    });
+const getRefinedFeed = async () => {
+    return await parseFeed(await getFeed(feedUrl));
 };
 
-const getLastId = async () => {
-    return new Promise((resolve, reject) => {
-        if (lastId === null) {
-            setLastId();
-            resolve(lastId);
-        } else {
-            resolve(lastId);
+const setLastUpdated = async (lastUpdatedParam = data.lastUpdated) => {
+    let dataCopy = Object.assign({}, data);
+    let currLastUpdated,
+        prevLastUpdated = lastUpdatedParam;
+
+    if (prevLastUpdated === null) {
+        const feedItems = (await getRefinedFeed()).items;
+        if (feedItems.length > 3) {
+            currLastUpdated = feedItems[2].time;
+        }
+        else {
+            currLastUpdated = feedItems[feedItems.length - 1].time;
+        }
+    }
+    else {
+        currLastUpdated = lastUpdatedParam;
+    }
+
+    dataCopy.lastUpdated = currLastUpdated;
+
+    await writeFile(path.join(__dirname, './.data.json'), JSON.stringify(dataCopy), 'utf8', (err) => {
+        if (err) {
+            throw err;
+        }
+        else {
+            console.log('file saved');
         }
     });
 };
 
-const compare = async (feed) => {
-    let lastId      = await getLastId();
-    let unreadItems = [];
-    const itemList = feed.items;
-    itemList.map((item, index) => {
-        if (item.id === lastId) {
-            lastId = itemList[0].id;
-            return;
+const getLastUpdated = () => {
+    return require('./.data.json').lastUpdated;
+};
+
+const getUnreadItems = async () => {
+    const feed         = await getRefinedFeed();
+    const itemList     = feed.items;
+    let lastUpdated    = getLastUpdated();
+    let unreadItems    = [];
+
+    for (const item of itemList) {
+        if (item.time === lastUpdated) {
+            lastUpdated = feed.lastUpdated;
+            break;
         } else {
             unreadItems.push(item);
+            if (unreadItems.length === 3) {
+                lastUpdated = feed.lastUpdated;
+                break;
+            }
         }
-    });
-    setLastId();
+    }
+
+    setLastUpdated(lastUpdated);
     return unreadItems;
 };
 
-notifier.notify(
-    {
-        title: 'GitHub Feed',
-        message: 'plibither8 starred plibither8/markdown-new-tab',
-        sound: true,
-        wait: true
-    },
-    (err, res) => {
-        console.log('hello');
-    }
-);
+const imageDownload = (uri, filename, callback) => {
+    request.head(uri, (err, res, body) => {
+        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+    });
+};
 
 (async () => {
-    const feed = await parseFeed(await getFeed(feedURL));
-    console.log(feed)
+
+    setLastUpdated();
+
+    const unreadItems = await getUnreadItems();
+    unreadItems.map(item => {
+
+        const imageUrl = item.img;
+        const imageDest = path.join(__dirname, ('./cache/'+item.author+'.png'));
+
+        imageDownload(imageUrl, imageDest, () => {
+            notifier.notify({
+                title: `${item.author} - GitHub`,
+                message: item.title,
+                icon: imageDest,
+                sound: true,
+                wait: true
+            });
+        });
+
+    })
 })()

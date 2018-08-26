@@ -9,8 +9,11 @@
     "dev": "nodemon index"
   },
   "dependencies": {
+    "image-cache": "^1.0.1",
+    "image-downloader": "^3.4.1",
     "node-html-parser": "^1.1.9",
     "node-notifier": "^5.2.1",
+    "open": "0.0.5",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "rss-parser": "^3.4.3"
