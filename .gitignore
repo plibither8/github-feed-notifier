@@ -1,8 +1,6 @@
 
 # Created by https://www.gitignore.io/api/node,macos,windows,webstorm,sublimetext,visualstudiocode
 
-cache
-
 ### macOS ###
 *.DS_Store
 .AppleDouble

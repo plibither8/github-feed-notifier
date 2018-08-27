@@ -128,7 +128,7 @@ const notify = (item, imageDest) => {
             const imageUrl = item.img;
             const imageDest = path.join(__dirname, `./cache/${item.author}.png`);
             
-            imageDownload(imageUrl, imageDest, () => notify(item, imageDest));
+            setTimeout(imageDownload(imageUrl, imageDest, () => notify(item, imageDest)), 5*1000);
             
         });
         console.log('Refresh count:', ++refreshCount);
