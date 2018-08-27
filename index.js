@@ -6,7 +6,7 @@ const path           = require('path');
 const open           = require('open');
 
 const {
-    imageDownload, 
+    imageDownload,
     updateJson
 }                    = require('./helpers');
 const feedUrl        = require('./.data.json').url;
@@ -62,7 +62,7 @@ const setLastUpdated = async (prevLastUpdated = getLastUpdated()) => {
     if (prevLastUpdated === null) {
         const feedItems = (await getRefinedFeed()).items;
         if (feedItems.length > 3) {
-            currLastUpdated = feedItems[2].time;
+            currLastUpdated = feedItems[3].time;
         }
         else {
             currLastUpdated = feedItems[feedItems.length - 1].time;
@@ -82,6 +82,7 @@ const getUnreadItems = async () => {
     const itemList   = feed.items;
     let lastUpdated  = getLastUpdated();
     let unreadItems  = [];
+    console.log('first:', lastUpdated);
 
     for (const item of itemList) {
         if (item.time === lastUpdated) {
@@ -124,16 +125,18 @@ const notify = (item, imageDest) => {
     setInterval(async () => {
 
         (await getUnreadItems()).map(item => {
-            
+
             const imageUrl = item.img;
             const imageDest = path.join(__dirname, `./cache/${item.author}.png`);
-            
-            setTimeout(imageDownload(imageUrl, imageDest, () => notify(item, imageDest)), 5*1000);
-            
+
+            setTimeout(() => {
+                imageDownload(imageUrl, imageDest, () => notify(item, imageDest))
+            }, 10*1000);
+
         });
         console.log('Refresh count:', ++refreshCount);
         console.log('===================')
 
-    }, 60*1000);
+    }, 10*1000);
 
 })();
