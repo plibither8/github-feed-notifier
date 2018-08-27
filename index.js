@@ -4,16 +4,12 @@ const notifier       = require('node-notifier');
 const htmlParser     = require('node-html-parser');
 const path           = require('path');
 const open           = require('open');
-const fs             = require('fs');
-const { promisify }  = require('util');
-const writeFile      = promisify(fs.writeFile);
 
-const {atob, btoa}   = require('./helpers.js');
-let data             = require('./.data.json');
-
-const feedUrl = data.url;
-
-let jsonFeed;
+const {
+    imageDownload, 
+    updateJson
+}                    = require('./helpers');
+const feedUrl        = require('./.data.json').url;
 
 const getFeed = async (url) => {
     let xmlString;
@@ -47,7 +43,7 @@ const parseFeed = async (str) => {
         });
     });
 
-    console.log(refinedJsonFeed);
+    // console.log(refinedJsonFeed);
     return refinedJsonFeed;
 };
 
@@ -55,10 +51,13 @@ const getRefinedFeed = async () => {
     return await parseFeed(await getFeed(feedUrl));
 };
 
-const setLastUpdated = async (lastUpdatedParam = data.lastUpdated) => {
-    let dataCopy = Object.assign({}, data);
-    let currLastUpdated,
-        prevLastUpdated = lastUpdatedParam;
+const getLastUpdated = () => {
+    return require('./.data.json').lastUpdated;
+};
+
+const setLastUpdated = async (prevLastUpdated = getLastUpdated()) => {
+    let dataCopy = require('./.data.json');
+    let currLastUpdated;
 
     if (prevLastUpdated === null) {
         const feedItems = (await getRefinedFeed()).items;
@@ -70,73 +69,71 @@ const setLastUpdated = async (lastUpdatedParam = data.lastUpdated) => {
         }
     }
     else {
-        currLastUpdated = lastUpdatedParam;
+        currLastUpdated = prevLastUpdated;
     }
 
     dataCopy.lastUpdated = currLastUpdated;
+    updateJson(dataCopy);
 
-    await writeFile(path.join(__dirname, './.data.json'), JSON.stringify(dataCopy), 'utf8', (err) => {
-        if (err) {
-            throw err;
-        }
-        else {
-            console.log('file saved');
-        }
-    });
-};
-
-const getLastUpdated = () => {
-    return require('./.data.json').lastUpdated;
 };
 
 const getUnreadItems = async () => {
-    const feed         = await getRefinedFeed();
-    const itemList     = feed.items;
-    let lastUpdated    = getLastUpdated();
-    let unreadItems    = [];
+    const feed       = await getRefinedFeed();
+    const itemList   = feed.items;
+    let lastUpdated  = getLastUpdated();
+    let unreadItems  = [];
 
     for (const item of itemList) {
         if (item.time === lastUpdated) {
-            lastUpdated = feed.lastUpdated;
             break;
         } else {
             unreadItems.push(item);
-            if (unreadItems.length === 3) {
-                lastUpdated = feed.lastUpdated;
+            if (unreadItems.length === 5) {
                 break;
             }
         }
     }
 
-    setLastUpdated(lastUpdated);
+    if (unreadItems.length > 0) {
+        console.log(unreadItems);
+        lastUpdated = feed.lastUpdated;
+        setLastUpdated(lastUpdated);
+    } else {
+        console.log('No new items');
+    }
+
     return unreadItems;
 };
 
-const imageDownload = (uri, filename, callback) => {
-    request.head(uri, (err, res, body) => {
-        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+const notify = (item, imageDest) => {
+    notifier.notify({
+        title: `${item.author} - GitHub`,
+        message: item.title,
+        icon: imageDest,
+        sound: true,
+        wait: true,
+        timeout: 5
     });
 };
 
-(async () => {
+(() => {
 
     setLastUpdated();
+    let refreshCount = 0;
 
-    const unreadItems = await getUnreadItems();
-    unreadItems.map(item => {
+    setInterval(async () => {
 
-        const imageUrl = item.img;
-        const imageDest = path.join(__dirname, ('./cache/'+item.author+'.png'));
-
-        imageDownload(imageUrl, imageDest, () => {
-            notifier.notify({
-                title: `${item.author} - GitHub`,
-                message: item.title,
-                icon: imageDest,
-                sound: true,
-                wait: true
-            });
+        (await getUnreadItems()).map(item => {
+            
+            const imageUrl = item.img;
+            const imageDest = path.join(__dirname, `./cache/${item.author}.png`);
+            
+            imageDownload(imageUrl, imageDest, () => notify(item, imageDest));
+            
         });
+        console.log('Refresh count:', ++refreshCount);
+        console.log('===================')
 
-    })
-})()
+    }, 60*1000);
+
+})();
