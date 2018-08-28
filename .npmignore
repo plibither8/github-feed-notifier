@@ -1,5 +1,6 @@
 src/
 test/
+assets/
 .github/
 .babelrc
 .eslintrc
