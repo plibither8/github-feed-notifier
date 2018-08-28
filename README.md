@@ -1,4 +1,4 @@
-# github-feed-notifier
+# github-feed-notifier 🔔
 
 [![Build Status](https://img.shields.io/travis/plibither8/github-feed-notifier/master.svg?style=flat-square)](https://travis-ci.org/plibither8/github-feed-notifier)
 [![Number of downloads](https://img.shields.io/npm/dt/github-feed-notifier.svg?style=flat-square)](https://www.npmjs.com/package/github-feed-notifier)
@@ -8,7 +8,7 @@
 
 ![npm](https://nodei.co/npm/github-feed-notifier.png)
 
-> Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity
+> :octocat::bell: Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity
 
 ## About
 
@@ -31,13 +31,32 @@ There are [quite a few](https://github.com/search?q=github+notifier) "feed notif
 
 * [NodeJS](https://nodejs.org/en/download/) (and npm, of course)
 
-Install GFN globally by running the following command:
+Install GFN globally:
 
 ```sh
 $ npm install -g github-feed-notifier
 ```
 
-GFN can now be run as a foreground process in your terminal: `$ gfn` or `$ github-feed-notifier`
+and configure:
+
+```sh
+$ gfn config
+```
+
+Once properly configured, GFN can be run as a foreground process in your terminal: `$ gfn` or `$ github-feed-notifier`
+
+### Configuration
+
+The main requirement for configuration is your personal GitHub feed URL. You can obtain it by following these steps:
+
+1. Login to GitHub and go to your dashboard (the [homepage](https://github.com))
+2. Scroll down entirely, to the bottom of the feed (do not click the 'Load more' button)
+3. Click on the "Subscribe to your news feed" link
+
+![readme-subscribe-to-feed](assets/readme-subscribe-to-feed.png)
+
+4. Copy the URL of this link. This is your personal feed URL
+5. Run `gfn config` and paste this link
 
 ### Run as Background Process
 
