@@ -1,8 +1,14 @@
 {
   "name": "github-feed-notifier",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity",
   "main": "lib/index.js",
+  "keywords": [
+    "github",
+    "github-feed",
+    "notifications",
+    "notifier"
+  ],
   "scripts": {
     "lint": "eslint ./src/*.js",
     "lint:fix": "npm run lint -- --fix",
