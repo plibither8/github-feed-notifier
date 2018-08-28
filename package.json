@@ -6,11 +6,17 @@
   "scripts": {
     "lint": "eslint ./index.js",
     "lint:fix": "npm run lint -- --fix",
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "forever-start": "forever start -a --uid \"github-feed-notifier\" index.js",
+    "forever-stop": "forever stop 'github-feed-notifier'"
   },
   "dependencies": {
+    "forever": "^0.15.3",
+    "forever-monitor": "^1.7.1",
     "image-cache": "^1.0.1",
     "image-downloader": "^3.4.1",
+    "is-online": "^7.0.0",
+    "meow": "^5.0.0",
     "node-html-parser": "^1.1.9",
     "node-notifier": "^5.2.1",
     "open": "0.0.5",
@@ -22,6 +28,10 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.0.0"
+  },
+  "bin": {
+    "gfn": "./index.js",
+    "github-feed-notifier": "./index.js"
   },
   "repository": {
     "type": "git",
