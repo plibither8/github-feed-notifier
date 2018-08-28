@@ -5,10 +5,15 @@ const path           = require('path');
 
 const writeFile      = promisify(fs.writeFile);
 
-const imageDownload = (uri, filename, callback) => {
-    request.head(uri, (err, res, body) => {
-        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-    });
+const imageCheckAndDownload = (uri, filename, callback) => {
+    if (!fs.existsSync(filename)) {
+        request.head(uri, (err, res, body) => {
+            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        });
+    }
+    else {
+        callback();
+    }
 };
 
 const updateJson = async (data) => {
@@ -17,10 +22,9 @@ const updateJson = async (data) => {
             throw err;
         }
         else {
-            console.log('file saved');
         }
     });
 }
 
-module.exports.imageDownload = imageDownload;
+module.exports.imageCheckAndDownload = imageCheckAndDownload;
 module.exports.updateJson = updateJson;

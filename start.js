@@ -7,7 +7,7 @@ const open           = require('open');
 const isOnline       = require('is-online');
 
 const {
-    imageDownload,
+    imageCheckAndDownload,
     updateJson
 }                    = require('./helpers');
 const feedUrl        = require('./data.json').url;
@@ -50,19 +50,19 @@ const parseFeed = async (str) => {
 };
 
 const getRefinedFeed = async () => {
-    return await parseFeed(await getFeed(feedUrl));
+    return parseFeed(await getFeed(feedUrl));
 };
 
 const getLastUpdated = () => {
     return require('./data.json').lastUpdated;
 };
 
-const setLastUpdated = async (prevLastUpdated = getLastUpdated()) => {
+const setLastUpdated = (prevLastUpdated = getLastUpdated()) => {
     let dataCopy = require('./data.json');
     let currLastUpdated;
 
     if (prevLastUpdated === null) {
-        const feedItems = (await getRefinedFeed()).items;
+        const feedItems = getRefinedFeed().items;
         if (feedItems.length > 3) {
             currLastUpdated = feedItems[3].time;
         }
@@ -76,14 +76,13 @@ const setLastUpdated = async (prevLastUpdated = getLastUpdated()) => {
 
     dataCopy.lastUpdated = currLastUpdated;
     updateJson(dataCopy);
-
 };
 
 const getUnreadItems = async () => {
-    const feed       = await getRefinedFeed();
-    const itemList   = feed.items;
-    let lastUpdated  = getLastUpdated();
-    let unreadItems  = [];
+    const feed        = await getRefinedFeed();
+    const itemList    = feed.items;
+    const lastUpdated = getLastUpdated();
+    let unreadItems   = [];
 
     for (const item of itemList) {
         if (item.time === lastUpdated) {
@@ -98,8 +97,7 @@ const getUnreadItems = async () => {
 
     if (unreadItems.length > 0) {
         console.log(unreadItems);
-        lastUpdated = feed.lastUpdated;
-        setLastUpdated(lastUpdated);
+        setLastUpdated(feed.lastUpdated);
     } else {
         console.log('No new items');
     }
@@ -134,7 +132,7 @@ module.exports = () => {
                 const imageDest = path.join(__dirname, `./cache/${item.author}.png`);
 
                 setTimeout(() => {
-                    imageDownload(imageUrl, imageDest, () => notify(item, imageDest));
+                    imageCheckAndDownload(imageUrl, imageDest, () => notify(item, imageDest));
                 }, 10 * 1000);
 
             });

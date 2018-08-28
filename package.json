@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint ./index.js",
     "lint:fix": "npm run lint -- --fix",
-    "dev": "nodemon index",
+    "dev": "nodemon index --ignore *.json",
     "forever-start": "forever start -a --uid \"github-feed-notifier\" index.js",
     "forever-stop": "forever stop 'github-feed-notifier'"
   },
