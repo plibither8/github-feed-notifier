@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const notifier    = require('node-notifier');
 const start       = require('./start');
 const config      = require('./config.js');
