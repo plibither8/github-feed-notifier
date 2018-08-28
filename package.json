@@ -2,16 +2,15 @@
   "name": "github-notif",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "lint": "eslint ./*.js",
+    "lint": "eslint ./src/*.js",
     "lint:fix": "npm run lint -- --fix",
-    "dev": "nodemon index --ignore *.json",
-    "forever-start": "forever start -a --uid \"github-feed-notifier\" index.js",
-    "forever-stop": "forever stop 'github-feed-notifier'"
+    "dev": "nodemon src/index --ignore *.json",
+    "build": "babel src/ --out-dir lib/",
+    "build:watch": "npm run build -- --watch"
   },
   "dependencies": {
-    "chalk": "^2.4.1",
     "inquirer": "^6.2.0",
     "is-online": "^7.0.0",
     "node-html-parser": "^1.1.9",
@@ -26,17 +25,17 @@
     "eslint": "^5.0.0"
   },
   "bin": {
-    "gfn": "./index.js",
-    "github-feed-notifier": "./index.js"
+    "gfn": ".lib/index.js",
+    "github-feed-notifier": ".lib/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plibither8/github-notif.git"
+    "url": "git+https://github.com/plibither8/github-feed-notifier.git"
   },
   "author": "Mihir Chaturvedi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/plibither8/github-notif/issues"
+    "url": "https://github.com/plibither8/github-feed-notifier/issues"
   },
-  "homepage": "https://github.com/plibither8/github-notif#readme"
+  "homepage": "https://github.com/plibither8/github-feed-notifier#readme"
 }
