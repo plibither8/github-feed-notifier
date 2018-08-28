@@ -10,12 +10,16 @@ const {
     imageCheckAndDownload,
     updateJson
 }                    = require('./helpers');
-const feedUrl        = require('./data.json').url;
+const {
+    feedUrl,
+    refreshDelay,
+    maxNotificationDisplay
+}                    = require('./config.json');
 
 const getFeed = async (url) => {
 
     let xmlString;
-    await request(url, (err, status, body) => {
+    await request(feedUrl, (err, status, body) => {
         xmlString = body;
         if (err) {
             throw err;
@@ -54,17 +58,17 @@ const getRefinedFeed = async () => {
 };
 
 const getLastUpdated = () => {
-    return require('./data.json').lastUpdated;
+    return require('./resources/data.json').lastUpdated;
 };
 
 const setLastUpdated = (prevLastUpdated = getLastUpdated()) => {
-    let dataCopy = require('./data.json');
+    let dataCopy = require('./resources/data.json');
     let currLastUpdated;
 
     if (prevLastUpdated === null) {
         const feedItems = getRefinedFeed().items;
-        if (feedItems.length > 3) {
-            currLastUpdated = feedItems[3].time;
+        if (feedItems.length > maxNotificationDisplay) {
+            currLastUpdated = feedItems[maxNotificationDisplay].time;
         }
         else {
             currLastUpdated = feedItems[feedItems.length - 1].time;
@@ -89,7 +93,7 @@ const getUnreadItems = async () => {
             break;
         } else {
             unreadItems.push(item);
-            if (unreadItems.length === 5) {
+            if (unreadItems.length === maxNotificationDisplay) {
                 break;
             }
         }
@@ -129,7 +133,7 @@ module.exports = () => {
             (await getUnreadItems()).map(item => {
 
                 const imageUrl = item.img;
-                const imageDest = path.join(__dirname, `./cache/${item.author}.png`);
+                const imageDest = path.join(__dirname, `./resources/cache/${item.author}.png`);
 
                 setTimeout(() => {
                     imageCheckAndDownload(imageUrl, imageDest, () => notify(item, imageDest));
@@ -143,6 +147,6 @@ module.exports = () => {
             console.log('no internet');
         }
 
-    }, 60*1000);
+    }, refreshDelay);
 
 };
