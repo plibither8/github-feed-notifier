@@ -1,7 +1,7 @@
 {
   "name": "github-notif",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint ./src/*.js",
@@ -25,8 +25,8 @@
     "eslint": "^5.0.0"
   },
   "bin": {
-    "gfn": ".lib/index.js",
-    "github-feed-notifier": ".lib/index.js"
+    "gfn": "./lib/index.js",
+    "github-feed-notifier": "./lib/index.js"
   },
   "repository": {
     "type": "git",

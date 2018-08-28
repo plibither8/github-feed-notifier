@@ -1,5 +1,13 @@
 # github-feed-notifier
 
+[![Build Status](https://img.shields.io/travis/plibither8/github-feed-notifier/master.svg?style=flat-square)](https://travis-ci.org/plibither8/github-feed-notifier)
+[![Number of downloads](https://img.shields.io/npm/dt/github-feed-notifier.svg?style=flat-square)](https://www.npmjs.com/package/github-feed-notifier)
+[![Licence](https://img.shields.io/npm/l/github-feed-notifier.svg?maxAge=2592000&style=flat-square)](LICENSE)
+[![Number of dependencies](https://img.shields.io/david/plibither8/github-feed-notifier.svg?maxAge=2592000&style=flat-square)](https://www.npmjs.com/package/github-feed-notifier?activeTab=dependencies)
+[![Made with Love in India](https://madewithlove.org.in/badge.svg)](https://madewithlove.org.in/)
+
+![npm](https://nodei.co/npm/github-feed-notifier.png)
+
 > Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity
 
 ## About
