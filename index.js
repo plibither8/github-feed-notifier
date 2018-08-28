@@ -24,7 +24,7 @@ else {
         });
 
         console.error('\x1b[1m\x1b[31m%s\x1b[0m', '\nERROR: github-feed-notifier: feed URL not set or invalid.');
-        console.log('Run \x1b[1m`gnf config`\x1b[0m to set your GitHub feed URL, amongst other configurations.\nVisit \x1b[1mhttps://github.com/plibither8/github-feed-notifier\x1b[0m for help in finding personal feed URL.');
+        console.error('Run \x1b[1m`gnf config`\x1b[0m to set your GitHub feed URL, amongst other configurations.\nVisit \x1b[1mhttps://github.com/plibither8/github-feed-notifier\x1b[0m for help in finding personal feed URL.');
 
     }
 

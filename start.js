@@ -15,7 +15,7 @@ const {
     maxNotificationDisplay
 }                    = require('./config.json');
 
-const getFeed = async (url) => {
+const getFeed = async () => {
 
     let xmlString;
     await request(feedUrl, (err, status, body) => {
@@ -24,9 +24,7 @@ const getFeed = async (url) => {
             throw err;
         }
     });
-    return new Promise((resolve, reject) => {
-        resolve(xmlString);
-    });
+    return xmlString;
 
 };
 
@@ -53,7 +51,7 @@ const parseFeed = async (str) => {
 };
 
 const getRefinedFeed = async () => {
-    return parseFeed(await getFeed(feedUrl));
+    return parseFeed(await getFeed());
 };
 
 const getLastUpdated = () => {

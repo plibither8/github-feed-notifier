@@ -14,7 +14,7 @@ const write = async (obj) => {
             console.log('\x1b[1m\x1b[32m%s\x1b[0m', '\n✔️ Configuration saved!', 'You can now start using github-feed-notifier');
         }
     });
-}
+};
 
 module.exports = async () => {
 
@@ -24,23 +24,23 @@ module.exports = async () => {
         refreshDelay,
         maxNotificationDisplay
     } = await prompt([{
-            type: 'input',
-            name: 'feedUrl',
-            message: 'GitHub feed URL',
-            default: require('./config.json').feedUrl ? require('./config.json').feedUrl : null
-        },
-        {
-            type: 'input',
-            name: 'refreshDelay',
-            message: 'Refresh delay (milliseconds)',
-            default: 60000
-        },
-        {
-            type: 'input',
-            name: 'maxNotificationDisplay',
-            message: 'Maximum number of notifications to display at a time',
-            default: 3
-        }
+        type: 'input',
+        name: 'feedUrl',
+        message: 'GitHub feed URL',
+        default: require('./config.json').feedUrl ? require('./config.json').feedUrl : null
+    },
+    {
+        type: 'input',
+        name: 'refreshDelay',
+        message: 'Refresh delay (milliseconds)',
+        default: 60000
+    },
+    {
+        type: 'input',
+        name: 'maxNotificationDisplay',
+        message: 'Maximum number of notifications to display at a time',
+        default: 3
+    }
     ]);
 
     const configObj = {
@@ -51,4 +51,4 @@ module.exports = async () => {
 
     await write(configObj);
 
-};;
+};
