@@ -145,6 +145,6 @@ module.exports = () => {
             console.log('no internet');
         }
 
-    }, 5*1000);
+    }, 60*1000);
 
 };
