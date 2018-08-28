@@ -12,7 +12,7 @@ const imageDownload = (uri, filename, callback) => {
 };
 
 const updateJson = async (data) => {
-    await writeFile(path.join(__dirname, './.data.json'), JSON.stringify(data), 'utf8', (err) => {
+    await writeFile(path.join(__dirname, './data.json'), JSON.stringify(data), 'utf8', (err) => {
         if (err) {
             throw err;
         }
