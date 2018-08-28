@@ -3,12 +3,11 @@ const rssParser      = require('rss-parser');
 const notifier       = require('node-notifier');
 const htmlParser     = require('node-html-parser');
 const path           = require('path');
-const open           = require('open');
 const isOnline       = require('is-online');
 
 const {
     imageCheckAndDownload,
-    updateJson
+    writeToDataJson
 }                    = require('./helpers');
 const {
     feedUrl,
@@ -61,12 +60,12 @@ const getLastUpdated = () => {
     return require('./resources/data.json').lastUpdated;
 };
 
-const setLastUpdated = (prevLastUpdated = getLastUpdated()) => {
+const setLastUpdated = async (prevLastUpdated = getLastUpdated()) => {
     let dataCopy = require('./resources/data.json');
     let currLastUpdated;
 
     if (prevLastUpdated === null) {
-        const feedItems = getRefinedFeed().items;
+        const feedItems = (await getRefinedFeed()).items;
         if (feedItems.length > maxNotificationDisplay) {
             currLastUpdated = feedItems[maxNotificationDisplay].time;
         }
@@ -79,7 +78,7 @@ const setLastUpdated = (prevLastUpdated = getLastUpdated()) => {
     }
 
     dataCopy.lastUpdated = currLastUpdated;
-    updateJson(dataCopy);
+    writeToDataJson(dataCopy);
 };
 
 const getUnreadItems = async () => {
@@ -111,7 +110,7 @@ const getUnreadItems = async () => {
 
 const notify = (item, imageDest) => {
     notifier.notify({
-        title: `${item.author} - GitHub`,
+        title: item.author,
         message: item.title,
         icon: imageDest,
         sound: true,

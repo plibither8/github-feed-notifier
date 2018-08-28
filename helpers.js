@@ -5,26 +5,32 @@ const path           = require('path');
 
 const writeFile      = promisify(fs.writeFile);
 
-const imageCheckAndDownload = (uri, filename, callback) => {
-    if (!fs.existsSync(filename)) {
-        request.head(uri, (err, res, body) => {
-            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-        });
-    }
-    else {
-        callback();
-    }
-};
+const searchImageUrl = (url) => {
+    const urlList = require('./resources/data.json').cachedUrls;
+    return urlList.indexOf(url);
+}
 
-const updateJson = async (data) => {
-    await writeFile(path.join(__dirname, './resources/data.json'), JSON.stringify(data), 'utf8', (err) => {
+const writeToDataJson = async (data) => {
+    await writeFile(path.join(__dirname, './resources/data.json'), JSON.stringify(data, null, '  '), 'utf8', (err) => {
         if (err) {
             throw err;
         }
-        else {
-        }
     });
-}
+};
+
+const imageCheckAndDownload = (url, filename, callback) => {
+    if (searchImageUrl(url) > -1) {
+        callback();
+    }
+    else {
+        request.head(url, (err, res, body) =>
+            request(url).pipe(fs.createWriteStream(filename)).on('close', callback)
+        );
+        let dataCopy = require('./resources/data.json');
+        dataCopy.cachedUrls.push(url);
+        writeToDataJson(dataCopy);
+    }
+};
 
 module.exports.imageCheckAndDownload = imageCheckAndDownload;
-module.exports.updateJson = updateJson;
+module.exports.writeToDataJson = writeToDataJson;
