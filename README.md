@@ -5,8 +5,8 @@
 [![Licence](https://img.shields.io/npm/l/gfn.svg?maxAge=2592000&style=flat)](LICENSE)
 [![Number of dependencies](https://img.shields.io/david/plibither8/gfn.svg?maxAge=2592000&style=flat)](https://www.npmjs.com/package/gfn?activeTab=dependencies)
 [![Made with Love in India](https://madewithlove.org.in/badge.svg)](https://madewithlove.org.in/)
-
 [![npm](https://nodei.co/npm/gfn.png?mini=true)](https://www.npmjs.com/package/gfn)
+
 
 > :octocat::bell: Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity
 
