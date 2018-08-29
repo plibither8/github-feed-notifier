@@ -27,9 +27,7 @@ There are [quite a few](https://github.com/search?q=github+notifier) "feed notif
 
 ### Installation
 
-#### Requirements
-
-* [NodeJS](https://nodejs.org/en/download/) (and npm, of course)
+[NodeJS](https://nodejs.org/en/download/) (and npm) is required.
 
 Install GFN globally:
 
@@ -57,6 +55,8 @@ The main requirement for configuration is your personal GitHub feed URL. You can
 
 4. Copy the URL of this link. This is your personal feed URL
 5. Run `gfn config` and paste this link
+
+**Note:** Those using @sindresorhus' extension [Refined GitHub](https://github.com/sindresorhus/refined-github) will need to either disable the extension temporarily or open you dashboard in Incognito/Private Mode to view the "Subscribe to your news feed" link.
 
 ### Run as a Background Process
 
