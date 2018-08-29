@@ -1,6 +1,6 @@
 # github-feed-notifier 🔔
 
-[![Build Status](https://img.shields.io/travis/plibither8/gfn/master.svg?style=flat)](https://travis-ci.org/plibither8/gfn)
+[![Build Status](https://img.shields.io/travis/plibither8/github-feed-notifier/master.svg?style=flat)](https://travis-ci.org/plibither8/github-feed-notifier)
 [![Number of downloads](https://img.shields.io/npm/dt/gfn.svg?style=flat)](https://www.npmjs.com/package/gfn)
 [![Licence](https://img.shields.io/npm/l/gfn.svg?maxAge=2592000&style=flat)](LICENSE)
 [![Number of dependencies](https://img.shields.io/david/plibither8/gfn.svg?maxAge=2592000&style=flat)](https://www.npmjs.com/package/gfn?activeTab=dependencies)
