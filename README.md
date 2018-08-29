@@ -1,12 +1,12 @@
 # github-feed-notifier 🔔
 
-[![Build Status](https://img.shields.io/travis/plibither8/github-feed-notifier/master.svg?style=flat-square)](https://travis-ci.org/plibither8/github-feed-notifier)
-[![Number of downloads](https://img.shields.io/npm/dt/github-feed-notifier.svg?style=flat-square)](https://www.npmjs.com/package/github-feed-notifier)
-[![Licence](https://img.shields.io/npm/l/github-feed-notifier.svg?maxAge=2592000&style=flat-square)](LICENSE)
-[![Number of dependencies](https://img.shields.io/david/plibither8/github-feed-notifier.svg?maxAge=2592000&style=flat-square)](https://www.npmjs.com/package/github-feed-notifier?activeTab=dependencies)
+[![Build Status](https://img.shields.io/travis/plibither8/gfn/master.svg?style=flat)](https://travis-ci.org/plibither8/gfn)
+[![Number of downloads](https://img.shields.io/npm/dt/gfn.svg?style=flat)](https://www.npmjs.com/package/gfn)
+[![Licence](https://img.shields.io/npm/l/gfn.svg?maxAge=2592000&style=flat)](LICENSE)
+[![Number of dependencies](https://img.shields.io/david/plibither8/gfn.svg?maxAge=2592000&style=flat)](https://www.npmjs.com/package/gfn?activeTab=dependencies)
 [![Made with Love in India](https://madewithlove.org.in/badge.svg)](https://madewithlove.org.in/)
 
-![npm](https://nodei.co/npm/github-feed-notifier.png)
+[![npm](https://nodei.co/npm/gfn.png?mini=true)](https://www.npmjs.com/package/gfn)
 
 > :octocat::bell: Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity
 
@@ -34,7 +34,7 @@ There are [quite a few](https://github.com/search?q=github+notifier) "feed notif
 Install GFN globally:
 
 ```sh
-$ npm install -g github-feed-notifier
+$ npm install -g gfn
 ```
 
 and configure:
@@ -58,7 +58,7 @@ The main requirement for configuration is your personal GitHub feed URL. You can
 4. Copy the URL of this link. This is your personal feed URL
 5. Run `gfn config` and paste this link
 
-### Run as Background Process
+### Run as a Background Process
 
 Though GFN can be run directly as shown above, it is meant to be run as a **background process** on your computer to prevent using an extra terminal session.
 
@@ -73,7 +73,7 @@ $ npm install -g forever
 Once installed, start forever:
 
 ```sh
-$ forever start `npm root -g`/github-feed-notifier
+$ forever start `npm root -g`/gfn
 ```
 
 ### Start Automatically on System Startup

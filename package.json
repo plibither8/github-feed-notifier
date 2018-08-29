@@ -1,5 +1,5 @@
 {
-  "name": "github-feed-notifier",
+  "name": "gfn",
   "version": "0.0.2",
   "description": "Cross-platform, native, desktop notification service for notifying when personal GitHub dashboard feed gets updated with new activity",
   "main": "lib/index.js",
@@ -43,5 +43,6 @@
   "bugs": {
     "url": "https://github.com/plibither8/github-feed-notifier/issues"
   },
-  "homepage": "https://github.com/plibither8/github-feed-notifier#readme"
+  "homepage": "https://github.com/plibither8/github-feed-notifier#readme",
+  "preferGlobal": true
 }
