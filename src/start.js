@@ -120,6 +120,11 @@ const notify = (item, imageDest) => {
 module.exports = () => {
 
     setLastUpdated();
+    notifier.notify({
+        title: 'GitHub Feed Notifier',
+        message: 'github-feed-notifier started'
+    });
+
     let refreshCount = 0;
 
     setInterval(async () => {
